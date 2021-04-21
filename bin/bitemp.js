@@ -51,11 +51,14 @@ const ensureEmpty = args => {
 }
 
 const parseArgs = () => {
-  // Typically, args is [node, xxx.js, ...].
+  // Typically, args is [node, xxx.js, ...] or [xxx, ...].
   const args = process.argv.slice()
 
-  if (args[0]?.endsWith("node")) args.shift()
-  if (args[0]?.endsWith(".js")) args.shift()
+  if (args[0]?.endsWith("node")) {
+    args.splice(0, 2)
+  } else {
+    args.shift()
+  }
 
   const subcommand = args.shift() ?? "help"
   switch (subcommand) {
