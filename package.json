@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/vain0x/bitemp/issues"
   },
-  "homepage": "https://github.com/vain0x/bitemp#readme"
+  "homepage": "https://github.com/vain0x/bitemp#readme",
+  "bin": {
+    "bitemp": "bin/bitemp.js"
+  }
 }
