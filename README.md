@@ -1,10 +1,21 @@
 # bitemp
 
-Experiment of bidirectional template engine.
+Experiment of "bidirectional template engine."
 
-## Usage
+- [Install wih npm](#install-with-npm)
+- [Usage](#usage)
+- [Guide](#guide)
+- [Motivation](#motivation)
 
-Bitemp is an experimental implementation of "bidirectional template engine" ([see Motivation below](#motivation)).
+### Install with npm
+
+```sh
+git clone https://github.com/vain0x/bitemp --filter=blob:none
+cd bitemp
+npm install --global .   # maybe with sudo
+```
+
+## Features
 
 Bitemp CLI supports these three subcommands:
 
@@ -15,25 +26,16 @@ Bitemp CLI supports these three subcommands:
 - `temp`: `instance = ?T(parameter)`.
     - Update a template from a pair of an instance and a parameter.
 
-Remark: Not ideal yet. Both template and parameter can't be modified at the same time.
+Remark: Not ideally, both template and parameter can't be modified at the same time.
 
+## Usage
+
+FIXME: more explanation
 FIXME: these commands don't write to files but to stdout for now...
-
-### Install with npm
-
-```sh
-git clone https://github.com/vain0x/bitemp --filter=blob:none
-cd bitemp
-npm install --global .   # maybe with sudo
-```
-
-### Subcommands
-
-TODO: more explanation
 
 See `bitemp --help`.
 
-The [tests](tests) directory and [test](test) command might be helpful.
+The [test](test) command and [tests](tests) directory might be helpful for a while.
 
 ### `param.json`
 
@@ -53,6 +55,10 @@ Structure:
 }
 ```
 
+----
+
+## Guide
+
 ### Creating a template
 
 First, write an instance file by hand.
@@ -63,7 +69,7 @@ Hello, John!
 
 (↑ `instance.txt`)
 
-Copy it to create a template file, replace some parts with "parameters".
+Copy it to create a template file, replace some parts with "parameters."
 
 ```
 Hello, {{name}}!
@@ -73,7 +79,7 @@ Hello, {{name}}!
 
 Create a param file (see above).
 Set 'template' path.
-Add the initial instance to 'instances' list with parameters with blank values.
+Add the initial instance to 'instances' list with parameters (no value).
 
 ```json
 {
@@ -89,11 +95,25 @@ Add the initial instance to 'instances' list with parameters with blank values.
 }
 ```
 
-Fill parameter values automatically (by solving `instance = template(?P)`).
+Fill parameter values automatically.
 
 ```sh
-bitemp instance.txt param.json
+bitemp param instance.txt param.json
 ```
+
+See what happened.
+
+```sh
+grep '{{name}}' param.json
+```
+
+```
+                "{{name}}": "John"
+```
+
+### ...
+
+FIXME: more guide
 
 ----
 
