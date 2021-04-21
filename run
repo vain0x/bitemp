@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -eu
+
+P=tests/update-instance
+node bin/bitemp.js gen $P/ui-param.json

@@ -1,0 +1,12 @@
+{
+    "template": "tests/update-instance/ui-template.html",
+    "instances": [
+        {
+            "file": "tests/update-instance/ui-instance.generated.html",
+            "params": {
+                "{{contents}}": "<p>A happy new year!</p>\n        <p>...(snip)</p>",
+                "{{title}}": "A happy new year!"
+            }
+        }
+    ]
+}

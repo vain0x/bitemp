@@ -1,0 +1,12 @@
+{
+    "template": "tests/update-param/up-template.html",
+    "instances": [
+        {
+            "file": "tests/update-param/up-instance-modified.html",
+            "params": {
+                "{{contents}}": "<p>A happy new year!</p>\n        <p>...(snip)</p>\n\n        <!-- begin insert -->\n        <p><ins>Contents updated!</ins></p>\n        <!-- end insert -->",
+                "{{title}}": "A happy new year!"
+            }
+        }
+    ]
+}

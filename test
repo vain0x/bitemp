@@ -1,0 +1,46 @@
+#!/bin/sh
+
+set -eu
+
+BITEMP='node bin/bitemp.js'
+
+{
+    P=tests/update-instance
+
+    rm -rf $P/ui-instance.generated.html
+
+    $BITEMP gen $P/ui-param.json >$P/ui-instance.generated.html
+
+    set -x
+    diff -q $P/ui-instance.generated.html $P/ui-instance-expected.html
+    set +x
+}
+
+{
+    P=tests/update-param
+
+    cp -f $P/up-param-old.json $P/up-param.generated.json
+
+    $BITEMP param $P/up-instance-modified.html $P/up-param.generated.json
+
+    set -x
+    diff -q $P/up-param.generated.json $P/up-param-expected.json
+    set +x
+}
+
+{
+    P=tests/update-template
+    T=tests/update-template/.temp.generated.txt
+
+    cp -f $P/ut-template-old.html $P/ut-template.generated.html
+
+    $BITEMP temp $P/ut-instance-modified.html $P/ut-param.json >$T
+
+    mv -f $T $P/ut-template.generated.html
+
+    set -x
+    diff -q $P/ut-template.generated.html $P/ut-template-expected.html
+    set +x
+}
+
+echo OK
