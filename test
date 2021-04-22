@@ -9,7 +9,7 @@ BITEMP='node bin/bitemp.js'
 
     rm -rf $P/ui-instance.generated.html
 
-    $BITEMP gen $P/ui-param.json >$P/ui-instance.generated.html
+    $BITEMP gen $P/ui-param.json
 
     set -x
     diff -q $P/ui-instance.generated.html $P/ui-instance-expected.html
@@ -34,9 +34,7 @@ BITEMP='node bin/bitemp.js'
 
     cp -f $P/ut-template-old.html $P/ut-template.generated.html
 
-    $BITEMP temp $P/ut-instance-modified.html $P/ut-param.json >$T
-
-    mv -f $T $P/ut-template.generated.html
+    $BITEMP temp $P/ut-instance-modified.html $P/ut-param.json
 
     set -x
     diff -q $P/ut-template.generated.html $P/ut-template-expected.html

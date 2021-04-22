@@ -115,8 +115,13 @@ const main = async () => {
       const templateFile = paramData["template"] ?? failwith("Missed 'template' in param file.")
       const template = await readTextFile(templateFile)
 
-      // TODO: rewrite files
-      process.stdout.write(generateInstance(template, Object.entries(paramData["instances"][0].params)))
+      await Promise.all(
+        paramData["instances"].map(({ file, params }) => ({
+          file,
+          instance: generateInstance(template, Object.entries(params)),
+        })).map(({ file, instance }) => (
+          fs.writeFile(file, instance)
+        )))
       return
     }
     case "param": {
@@ -128,7 +133,7 @@ const main = async () => {
       ])
 
       const templateFile = paramData["template"] ?? failwith("Missed 'template' in param file.")
-      const instances = paramData["instances"] ?? failwith ("Missed 'instances' in param file.")
+      const instances = paramData["instances"] ?? failwith("Missed 'instances' in param file.")
 
       const template = await readTextFile(templateFile)
 
@@ -156,7 +161,13 @@ const main = async () => {
       // console.log("newParams", newParams)
       await fs.writeFile(paramFile, JSON.stringify(paramData, undefined, 4))
 
-      // TODO: update other instances
+      await Promise.all(
+        instances.map(({ file, params }) => ({
+          file,
+          instance: generateInstance(template, Object.entries(params)),
+        })).map(({ file, instance }) => (
+          fs.writeFile(file, instance)
+        )))
       return
     }
     case "temp": {
@@ -168,7 +179,7 @@ const main = async () => {
       ])
 
       const templateFile = paramData["template"] ?? failwith("Missed 'template' in param file.")
-      const instances = paramData["instances"] ?? failwith ("Missed 'instances' in param file.")
+      const instances = paramData["instances"] ?? failwith("Missed 'instances' in param file.")
 
       const template = await readTextFile(templateFile)
 
@@ -185,18 +196,28 @@ const main = async () => {
         return null
       })()
       // console.log("instanceIndex", instanceIndex)
+      // if (instanceIndex == null) {
+      //   instanceIndex = instances.push({ file: instanceFile, params: {} }) - 1
+      // }
       if (instanceIndex == null) {
-        instanceIndex = instances.push({ file: instanceFile, params: {} }) - 1
+        console.error("hint: instanceFile:", instanceFile, "\n  paramFile:", paramFile)
+        throw new Error(`Instance is not registered in param file.`)
       }
 
       const bindings = Object.entries(instances[instanceIndex]["params"])
       // console.log("bindings", bindings)
 
-      // TODO: check integrity (instance = template(params))
       const newTemplate = updateTemplate(instance, template, bindings)
-      // TODO: write to file
-      process.stdout.write(newTemplate)
-      // TODO: update other instances
+
+      await fs.writeFile(templateFile, newTemplate)
+
+      await Promise.all(
+        [...instances.slice(0, instanceIndex), ...instances.slice(instanceIndex + 1)].map(({ file, params }) => ({
+          file,
+          instance: generateInstance(newTemplate, Object.entries(params)),
+        })).map(({ file, instance }) => (
+          fs.writeFile(file, instance)
+        )))
       return
     }
     default:
